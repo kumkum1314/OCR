@@ -26,4 +26,4 @@ with gr.Blocks() as demo:
     btn = gr.Button("Submit")
     btn.click(process, inputs=[image, keyword], outputs=[output_text, search_result])
 
-demo.launch()
+demo.launch(server_port=7863, share = True)  
