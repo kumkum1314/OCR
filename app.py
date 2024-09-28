@@ -19,11 +19,15 @@ with gr.Blocks() as demo:
     search_result = gr.Label(label="Search result")  # Search result
 
     def process(image, keyword):
-        text = ocr_process(image)  # Extract text
-        found = search_text(text, keyword)  # Search for the keyword
-        return text, "Keyword found!" if found else "Keyword not found."
+    # Your processing logic here
+    return "Processed text", "Keyword found!"
 
+with gr.Blocks() as demo:
+    image = gr.Image()
+    keyword = gr.Textbox()
+    output_text = gr.Textbox()
+    
     btn = gr.Button("Submit")
-    btn.click(process, inputs=[image, keyword], outputs=[output_text, search_result])
+    btn.click(process, inputs=[image, keyword], outputs=[output_text])
 
 demo.launch(server_port=7863, share = True)  
