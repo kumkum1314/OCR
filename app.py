@@ -9,25 +9,33 @@ def ocr_process(image):
 
 # Function to search keywords
 def search_text(extracted_text, keyword):
-    return keyword in extracted_text
+    return "Keyword found!" if keyword in extracted_text else "Keyword not found."
 
 # Build the interface
 with gr.Blocks() as demo:
-    image = gr.Image(type="pil")  # Upload image
-    keyword = gr.Textbox(label="Enter keyword to search")  # Keyword input
-    output_text = gr.Textbox(label="Extracted text")  # Show extracted text
-    search_result = gr.Label(label="Search result")  # Search result
+    # Upload image for OCR
+    image_input = gr.Image(type="pil", label="Upload Image")
 
-    def process(image, keyword):
-    # Your processing logic here
-    return "Processed text", "Keyword found!"
+    # Keyword input to search in the extracted text
+    keyword_input = gr.Textbox(label="Enter keyword to search")
 
-with gr.Blocks() as demo:
-    image = gr.Image()
-    keyword = gr.Textbox()
-    output_text = gr.Textbox()
-    
+    # Display extracted text
+    output_text = gr.Textbox(label="Extracted text")
+
+    # Display search result (whether keyword is found or not)
+    search_result = gr.Label(label="Search result")
+
+    # Button to submit and process the image and keyword
     btn = gr.Button("Submit")
-    btn.click(process, inputs=[image, keyword], outputs=[output_text])
 
-demo.launch(share = True)  
+    # Define what happens when the button is clicked
+    def process(image, keyword):
+        extracted_text = ocr_process(image)  # Perform OCR
+        search_res = search_text(extracted_text, keyword)  # Search for the keyword
+        return extracted_text, search_res
+
+    # Link button click to the processing function
+    btn.click(process, inputs=[image_input, keyword_input], outputs=[output_text, search_result])
+
+# Launch the Gradio app
+demo.launch(share=True)
